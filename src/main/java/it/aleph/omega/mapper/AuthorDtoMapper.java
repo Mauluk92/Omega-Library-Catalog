@@ -13,8 +13,6 @@ public interface AuthorDtoMapper {
 
     Author toEntity(AuthorDto dto);
     AuthorDto toDto(Author entity);
-
-    @Mapping(ignore = true, target="id")
     void update(@MappingTarget Author toUpdate, AuthorDto updated);
 
     List<AuthorDto> toDtoList(List<Author> authorList);

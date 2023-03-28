@@ -12,8 +12,6 @@ import java.util.List;
 public interface BookDtoMapper {
     Book toEntity(BookDto dto);
     BookDto toDto(Book entity);
-
-    @Mapping(ignore = true, target="id")
     void updateBook(@MappingTarget Book toUpdate, BookDto updated);
 
     List<BookDto> toDtoList(List<Book> entityList);

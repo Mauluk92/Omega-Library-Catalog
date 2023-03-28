@@ -13,8 +13,6 @@ public interface TagDtoMapper {
 
     Tag toEntity(TagDto dto);
     TagDto toDto(Tag entity);
-
-    @Mapping(ignore = true, target="id")
     void update(@MappingTarget Tag toUpdate, TagDto updated);
     List<TagDto> toDtoList(List<Tag> tagList);
 }
