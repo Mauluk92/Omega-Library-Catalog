@@ -2,12 +2,13 @@ package it.aleph.omega.dto;
 
 import lombok.Data;
 
-import java.sql.Date;
+import java.time.Instant;
+
 @Data
 public class AuthorDto {
 
     private String name;
-    private Date dateOfBirth;
+    private Instant dateOfBirth;
     private String biography;
 
 }
