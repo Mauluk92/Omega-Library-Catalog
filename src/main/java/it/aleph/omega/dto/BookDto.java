@@ -10,7 +10,8 @@ public class BookDto {
     @JsonProperty(access= JsonProperty.Access.READ_ONLY)
     private Long id;
     private String title;
-    private Integer quantity;
+    private String isbn;
+    private String deweyDecimalCode;
     private String contentDescription;
     private Instant pubDate;
     private String pubHouse;
