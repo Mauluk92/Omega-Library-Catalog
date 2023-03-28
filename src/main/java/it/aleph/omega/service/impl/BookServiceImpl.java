@@ -29,28 +29,31 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto updateBook(Long id, BookDto bookDto) {
-        Optional<Book> bookToUpdate = bookRepository.findById(id);
-        Book updatedBook = bookDtoMapper.toEntity(bookDto);
-        // TODO Create Exception class
-        Book bookObtained = bookToUpdate.orElseThrow(RuntimeException::new);
-        bookDtoMapper.updateBook(bookObtained, updatedBook);
-        bookRepository.save(bookObtained);
+        Book obtainedBook = bookRepository.findById(id).orElseThrow(RuntimeException::new);
+        bookDtoMapper.updateBook(obtainedBook, bookDto);
+        bookRepository.save(obtainedBook);
         return bookDto;
     }
 
     @Override
     public BookDto updateBookStatus(Long id, Boolean status) {
-        return null;
+        Book obtainedBook = bookRepository.findById(id).orElseThrow(RuntimeException::new);
+        obtainedBook.setAvailable(status);
+        bookRepository.save(obtainedBook);
+        return bookDtoMapper.toDto(obtainedBook);
     }
 
     @Override
     public BookDto getBookById(Long id) {
-        return null;
+        // TODO create notfound exception class with response status
+        Book obtainedBook = bookRepository.findById(id).orElseThrow(RuntimeException::new);
+        return bookDtoMapper.toDto(obtainedBook);
     }
 
     @Override
     public void removeBookById(Long id) {
-
+        Book obtainedBook = bookRepository.findById(id).orElseThrow(RuntimeException::new);
+        bookRepository.delete(obtainedBook);
     }
 
     @Override

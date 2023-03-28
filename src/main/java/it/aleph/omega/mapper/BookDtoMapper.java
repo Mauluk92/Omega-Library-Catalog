@@ -10,6 +10,6 @@ public interface BookDtoMapper {
     Book toEntity(BookDto dto);
     BookDto toDto(Book entity);
 
-    void updateBook(@MappingTarget Book toUpdate, Book updated);
+    void updateBook(@MappingTarget Book toUpdate, BookDto updated);
 
 }
