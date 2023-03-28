@@ -45,6 +45,7 @@ public class AuthorServiceImpl implements AuthorService {
     public AuthorDto updateAuthorById(Long id, AuthorDto updated) {
         Author authorObtained = authorRepository.findById(id).orElseThrow(RuntimeException::new);
         authorDtoMapper.update(authorObtained, updated);
+        authorRepository.save(authorObtained);
         return updated;
     }
 
