@@ -26,7 +26,7 @@ public class AuthorServiceImpl implements AuthorService {
     public AuthorDto addAuthor(AuthorDto authorDto) {
         Author entity = authorDtoMapper.toEntity(authorDto);
         authorRepository.save(entity);
-        return authorDto;
+        return authorDtoMapper.toDto(entity);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class AuthorServiceImpl implements AuthorService {
         Author authorObtained = authorRepository.findById(id).orElseThrow(RuntimeException::new);
         authorDtoMapper.update(authorObtained, updated);
         authorRepository.save(authorObtained);
-        return updated;
+        return authorDtoMapper.toDto(authorObtained);
     }
 
     @Override

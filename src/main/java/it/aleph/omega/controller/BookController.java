@@ -15,7 +15,7 @@ public class BookController {
     private final BookService bookService;
 
     @PostMapping("/book")
-    public BookDto addBook(BookDto bookDto){
+    public BookDto addBook(@RequestBody BookDto bookDto){
         return bookService.addBook(bookDto);
     }
 
@@ -25,7 +25,7 @@ public class BookController {
     }
 
     @PatchMapping("/book/{id}")
-    public BookDto updateBookStatus(@PathVariable("id") Long id, Boolean status){
+    public BookDto updateBookStatus(@PathVariable("id") Long id,@RequestBody Boolean status){
         return bookService.updateBookStatus(id, status);
     }
 
@@ -35,7 +35,7 @@ public class BookController {
     }
 
     @PutMapping("/book/{id}")
-    public BookDto updateBookById(@PathVariable("id") Long id, BookDto bookDto){
+    public BookDto updateBookById(@PathVariable("id") Long id, @RequestBody BookDto bookDto){
         return bookService.updateBook(id, bookDto);
     }
 
