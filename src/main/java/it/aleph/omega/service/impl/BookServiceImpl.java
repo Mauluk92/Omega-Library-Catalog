@@ -6,12 +6,14 @@ import it.aleph.omega.model.Book;
 import it.aleph.omega.repository.BookRepository;
 import it.aleph.omega.service.BookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -58,7 +60,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDto> filteredBookSearch(Integer pageSize, Integer pageNum, Long authorId, Long tagId, String title) {
-        return null;
+        Pageable pageable = PageRequest.of(pageNum, pageSize);
+        Page<Book> pageOfBooks = bookRepository.findAll(pageable);
+        return bookDtoMapper.toDtoList(pageOfBooks.get().collect(Collectors.toList()));
     }
 
     @Override
