@@ -17,5 +17,6 @@ public class Book {
     private String contentDescription;
     private Date pubDate;
     private String pubHouse;
+    private Boolean available;
 
 }
