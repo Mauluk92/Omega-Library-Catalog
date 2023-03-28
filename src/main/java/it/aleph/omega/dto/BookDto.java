@@ -1,18 +1,12 @@
-package it.aleph.omega.model;
+package it.aleph.omega.dto;
 
-import jakarta.persistence.*;
 import lombok.Data;
-
 
 import java.time.Instant;
 
 @Data
-@Entity
-public class Book {
+public class BookDto {
 
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long id;
     private String title;
     private Integer quantity;
     private String contentDescription;
