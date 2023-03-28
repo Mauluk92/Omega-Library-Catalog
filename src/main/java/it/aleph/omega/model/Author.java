@@ -6,7 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 
-import java.sql.Date;
+import java.time.Instant;
 
 @Data
 @Entity
@@ -16,6 +16,6 @@ public class Author {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private Date dateOfBirth;
+    private Instant dateOfBirth;
     private String biography;
 }
