@@ -7,6 +7,7 @@ import java.time.Instant;
 @Data
 public class BookDto {
 
+    private Long id;
     private String title;
     private Integer quantity;
     private String contentDescription;
