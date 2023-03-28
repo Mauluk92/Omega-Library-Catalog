@@ -9,12 +9,12 @@ import java.time.Instant;
 @Data
 @Entity
 public class Book {
-
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
     private String title;
-    private Integer quantity;
+    private String isbn;
+    private String deweyDecimalCode;
     private String contentDescription;
     private Instant pubDate;
     private String pubHouse;

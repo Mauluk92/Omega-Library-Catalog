@@ -25,7 +25,7 @@ public class TagServiceImpl implements TagService {
     public TagDto addTag(TagDto tagDto) {
         Tag entity = tagDtoMapper.toEntity(tagDto);
         tagRepository.save(entity);
-        return tagDto;
+        return tagDtoMapper.toDto(entity);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class TagServiceImpl implements TagService {
         Tag tagObtained = tagRepository.findById(id).orElseThrow(RuntimeException::new);
         tagDtoMapper.update(tagObtained, tagDto);
         tagRepository.save(tagObtained);
-        return tagDto;
+        return tagDtoMapper.toDto(tagObtained);
     }
 
     @Override
