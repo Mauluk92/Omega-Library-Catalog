@@ -1,10 +1,9 @@
 package it.aleph.omega.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -15,4 +14,7 @@ public class Tag {
     private Long id;
     private String tag;
     private String description;
+
+    @ManyToMany(mappedBy = "tagList")
+    private List<Book> taggedBookList;
 }
