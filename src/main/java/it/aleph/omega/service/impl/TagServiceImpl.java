@@ -1,6 +1,7 @@
 package it.aleph.omega.service.impl;
 
 import it.aleph.omega.dto.TagDto;
+import it.aleph.omega.exception.ResourceNotFoundException;
 import it.aleph.omega.mapper.TagDtoMapper;
 import it.aleph.omega.model.Tag;
 import it.aleph.omega.repository.TagRepository;
@@ -30,13 +31,13 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public TagDto getTagById(Long id) {
-        Tag tagObtained = tagRepository.findById(id).orElseThrow(RuntimeException::new);
+        Tag tagObtained = tagRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         return tagDtoMapper.toDto(tagObtained);
     }
 
     @Override
     public TagDto updateTagById(Long id, TagDto tagDto) {
-        Tag tagObtained = tagRepository.findById(id).orElseThrow(RuntimeException::new);
+        Tag tagObtained = tagRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         tagDtoMapper.update(tagObtained, tagDto);
         tagRepository.save(tagObtained);
         return tagDtoMapper.toDto(tagObtained);

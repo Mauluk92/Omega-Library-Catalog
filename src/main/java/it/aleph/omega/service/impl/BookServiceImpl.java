@@ -1,6 +1,7 @@
 package it.aleph.omega.service.impl;
 
 import it.aleph.omega.dto.BookDto;
+import it.aleph.omega.exception.ResourceNotFoundException;
 import it.aleph.omega.mapper.BookDtoMapper;
 import it.aleph.omega.model.Book;
 import it.aleph.omega.repository.BookRepository;
@@ -31,7 +32,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto updateBook(Long id, BookDto bookDto) {
-        Book obtainedBook = bookRepository.findById(id).orElseThrow(RuntimeException::new);
+        Book obtainedBook = bookRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         bookDtoMapper.updateBook(obtainedBook, bookDto);
         bookRepository.save(obtainedBook);
         return bookDtoMapper.toDto(obtainedBook);
@@ -39,7 +40,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto updateBookStatus(Long id, Boolean status) {
-        Book obtainedBook = bookRepository.findById(id).orElseThrow(RuntimeException::new);
+        Book obtainedBook = bookRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         obtainedBook.setAvailable(status);
         bookRepository.save(obtainedBook);
         return bookDtoMapper.toDto(obtainedBook);
@@ -47,14 +48,13 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto getBookById(Long id) {
-        // TODO create notfound exception class with response status
-        Book obtainedBook = bookRepository.findById(id).orElseThrow(RuntimeException::new);
+        Book obtainedBook = bookRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         return bookDtoMapper.toDto(obtainedBook);
     }
 
     @Override
     public void removeBookById(Long id) {
-        Book obtainedBook = bookRepository.findById(id).orElseThrow(RuntimeException::new);
+        Book obtainedBook = bookRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         bookRepository.delete(obtainedBook);
     }
 
