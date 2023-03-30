@@ -1,10 +1,15 @@
 package it.aleph.omega.service.impl;
 
+import it.aleph.omega.dto.AssociateBookDto;
 import it.aleph.omega.dto.BookDto;
 import it.aleph.omega.exception.ResourceNotFoundException;
 import it.aleph.omega.mapper.BookDtoMapper;
+import it.aleph.omega.model.Author;
 import it.aleph.omega.model.Book;
+import it.aleph.omega.model.Tag;
+import it.aleph.omega.repository.AuthorRepository;
 import it.aleph.omega.repository.BookRepository;
+import it.aleph.omega.repository.TagRepository;
 import it.aleph.omega.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,6 +26,8 @@ import java.util.stream.Collectors;
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
+    private final AuthorRepository authorRepository;
+    private final TagRepository tagRepository;
     private final BookDtoMapper bookDtoMapper;
 
     @Override
@@ -47,6 +54,17 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public BookDto associateBook(Long id, AssociateBookDto associateBookDto) {
+        Book obtainedBook = bookRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        List<Author> authors = authorRepository.findAllById(associateBookDto.getAuthorIdList());
+        List<Tag> tags = tagRepository.findAllById(associateBookDto.getTagIdList());
+        obtainedBook.setAuthorList(authors);
+        obtainedBook.setTagList(tags);
+        bookRepository.save(obtainedBook);
+        return bookDtoMapper.toDto(obtainedBook);
+    }
+
+    @Override
     public BookDto getBookById(Long id) {
         Book obtainedBook = bookRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         return bookDtoMapper.toDto(obtainedBook);
@@ -62,7 +80,7 @@ public class BookServiceImpl implements BookService {
     public List<BookDto> filteredBookSearch(Integer pageSize, Integer pageNum, Long authorId, Long tagId, String title) {
         Pageable pageable = PageRequest.of(pageNum, pageSize);
         Page<Book> pageOfBooks = bookRepository.findAll(pageable);
-        return bookDtoMapper.toDtoList(pageOfBooks.get().collect(Collectors.toList()));
+        return bookDtoMapper.toBookDtoList(pageOfBooks.get().collect(Collectors.toList()));
     }
 
     @Override

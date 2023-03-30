@@ -1,9 +1,7 @@
 package it.aleph.omega.dto;
 
-import com.fasterxml.jackson.annotation.*;
-import it.aleph.omega.model.Author;
-import it.aleph.omega.model.Tag;
-import jakarta.validation.constraints.NotEmpty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
@@ -31,15 +29,9 @@ public class BookDto {
     private String pubHouse;
     @NotNull
     private Boolean available;
-
-    @NotEmpty
-    @NotNull
     @JsonIgnoreProperties(value="bookList")
-    private List<Author> authorList;
-
-    @NotEmpty
-    @NotNull
+    private List<AuthorDto> authorList;
     @JsonIgnoreProperties(value="taggedBookList")
-    private List<Tag> tagList;
+    private List<TagDto> tagList;
 
 }
