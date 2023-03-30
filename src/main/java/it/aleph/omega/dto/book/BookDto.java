@@ -1,7 +1,9 @@
-package it.aleph.omega.dto;
+package it.aleph.omega.dto.book;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import it.aleph.omega.dto.author.AuthorDto;
+import it.aleph.omega.dto.tag.TagDto;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;

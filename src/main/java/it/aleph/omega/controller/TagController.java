@@ -1,7 +1,10 @@
 package it.aleph.omega.controller;
 
-import it.aleph.omega.dto.TagDto;
+import it.aleph.omega.dto.tag.CreateTagDto;
+import it.aleph.omega.dto.tag.TagDto;
+import it.aleph.omega.dto.tag.UpdateTagDto;
 import it.aleph.omega.service.TagService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,8 +17,8 @@ public class TagController {
     private final TagService tagService;
 
     @PostMapping("/tag")
-    public TagDto addTag(@RequestBody TagDto tagDto){
-        return tagService.addTag(tagDto);
+    public TagDto addTag(@RequestBody @Valid CreateTagDto createTagDto){
+        return tagService.addTag(createTagDto);
     }
 
     @GetMapping("/tag/{id}")
@@ -24,8 +27,8 @@ public class TagController {
     }
 
     @PutMapping("/tag/{id}")
-    public TagDto updateTagById(@PathVariable Long id, @RequestBody TagDto tagDto){
-        return tagService.updateTagById(id, tagDto);
+    public TagDto updateTagById(@PathVariable Long id, @RequestBody @Valid UpdateTagDto updateTagDto){
+        return tagService.updateTagById(id, updateTagDto);
     }
 
     @GetMapping("/tags")

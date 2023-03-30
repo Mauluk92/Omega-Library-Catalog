@@ -1,8 +1,11 @@
 package it.aleph.omega.controller;
 
-import it.aleph.omega.dto.AssociateBookDto;
-import it.aleph.omega.dto.BookDto;
+import it.aleph.omega.dto.book.AssociateBookDto;
+import it.aleph.omega.dto.book.BookDto;
+import it.aleph.omega.dto.book.CreateBookDto;
+import it.aleph.omega.dto.book.UpdateBookDto;
 import it.aleph.omega.service.BookService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,8 +19,8 @@ public class BookController {
     private final BookService bookService;
 
     @PostMapping("/book")
-    public BookDto addBook(@RequestBody BookDto bookDto){
-        return bookService.addBook(bookDto);
+    public BookDto addBook(@RequestBody @Valid CreateBookDto createBookDto){
+        return bookService.addBook(createBookDto);
     }
 
     @GetMapping("/book/{id}")
@@ -30,7 +33,7 @@ public class BookController {
         return bookService.updateBookStatus(id, status);
     }
     @PatchMapping("/book/associate/{id}")
-    public BookDto associateBook(@PathVariable("id") Long id, @RequestBody AssociateBookDto associateBookDto){
+    public BookDto associateBook(@PathVariable("id") Long id, @RequestBody @Valid AssociateBookDto associateBookDto){
         return bookService.associateBook(id, associateBookDto);
     }
 
@@ -40,8 +43,8 @@ public class BookController {
     }
 
     @PutMapping("/book/{id}")
-    public BookDto updateBookById(@PathVariable("id") Long id, @RequestBody BookDto bookDto){
-        return bookService.updateBook(id, bookDto);
+    public BookDto updateBookById(@PathVariable("id") Long id, @RequestBody @Valid UpdateBookDto updateBookDto){
+        return bookService.updateBook(id, updateBookDto);
     }
 
     @GetMapping("/books")
@@ -57,7 +60,5 @@ public class BookController {
     public void addBooks(@RequestParam("fileCsv") MultipartFile file){
         bookService.addBooks(file);
     }
-
-
 
 }

@@ -1,7 +1,9 @@
 package it.aleph.omega.service.impl;
 
-import it.aleph.omega.dto.AssociateBookDto;
-import it.aleph.omega.dto.BookDto;
+import it.aleph.omega.dto.book.AssociateBookDto;
+import it.aleph.omega.dto.book.BookDto;
+import it.aleph.omega.dto.book.CreateBookDto;
+import it.aleph.omega.dto.book.UpdateBookDto;
 import it.aleph.omega.exception.ResourceNotFoundException;
 import it.aleph.omega.mapper.BookDtoMapper;
 import it.aleph.omega.model.Author;
@@ -31,16 +33,16 @@ public class BookServiceImpl implements BookService {
     private final BookDtoMapper bookDtoMapper;
 
     @Override
-    public BookDto addBook(BookDto bookDto) {
-        Book book = bookDtoMapper.toEntity(bookDto);
+    public BookDto addBook(CreateBookDto createBookDto) {
+        Book book = bookDtoMapper.toEntity(createBookDto);
         bookRepository.save(book);
         return bookDtoMapper.toDto(book);
     }
 
     @Override
-    public BookDto updateBook(Long id, BookDto bookDto) {
+    public BookDto updateBook(Long id, UpdateBookDto updateBookDto) {
         Book obtainedBook = bookRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
-        bookDtoMapper.updateBook(obtainedBook, bookDto);
+        bookDtoMapper.updateBook(obtainedBook, updateBookDto);
         bookRepository.save(obtainedBook);
         return bookDtoMapper.toDto(obtainedBook);
     }
