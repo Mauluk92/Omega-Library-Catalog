@@ -1,4 +1,4 @@
-package it.aleph.omega.dto;
+package it.aleph.omega.dto.tag;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;

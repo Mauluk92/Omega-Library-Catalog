@@ -1,9 +1,9 @@
 package it.aleph.omega.controller;
 
-import it.aleph.omega.dto.AssociateBookDto;
-import it.aleph.omega.dto.BookDto;
-import it.aleph.omega.dto.CreateBookDto;
-import it.aleph.omega.dto.UpdateBookDto;
+import it.aleph.omega.dto.book.AssociateBookDto;
+import it.aleph.omega.dto.book.BookDto;
+import it.aleph.omega.dto.book.CreateBookDto;
+import it.aleph.omega.dto.book.UpdateBookDto;
 import it.aleph.omega.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -60,7 +60,5 @@ public class BookController {
     public void addBooks(@RequestParam("fileCsv") MultipartFile file){
         bookService.addBooks(file);
     }
-
-
 
 }

@@ -1,8 +1,8 @@
 package it.aleph.omega.controller;
 
-import it.aleph.omega.dto.AuthorDto;
-import it.aleph.omega.dto.CreateAuthorDto;
-import it.aleph.omega.dto.UpdateAuthorDto;
+import it.aleph.omega.dto.author.AuthorDto;
+import it.aleph.omega.dto.author.CreateAuthorDto;
+import it.aleph.omega.dto.author.UpdateAuthorDto;
 import it.aleph.omega.service.AuthorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

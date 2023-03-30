@@ -1,4 +1,4 @@
-package it.aleph.omega.dto;
+package it.aleph.omega.dto.author;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

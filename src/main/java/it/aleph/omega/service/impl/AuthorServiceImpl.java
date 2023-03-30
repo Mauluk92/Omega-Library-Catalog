@@ -1,8 +1,8 @@
 package it.aleph.omega.service.impl;
 
-import it.aleph.omega.dto.AuthorDto;
-import it.aleph.omega.dto.CreateAuthorDto;
-import it.aleph.omega.dto.UpdateAuthorDto;
+import it.aleph.omega.dto.author.AuthorDto;
+import it.aleph.omega.dto.author.CreateAuthorDto;
+import it.aleph.omega.dto.author.UpdateAuthorDto;
 import it.aleph.omega.exception.ResourceNotFoundException;
 import it.aleph.omega.mapper.AuthorDtoMapper;
 import it.aleph.omega.model.Author;

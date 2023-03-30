@@ -1,8 +1,8 @@
 package it.aleph.omega.service;
 
-import it.aleph.omega.dto.CreateTagDto;
-import it.aleph.omega.dto.TagDto;
-import it.aleph.omega.dto.UpdateTagDto;
+import it.aleph.omega.dto.tag.CreateTagDto;
+import it.aleph.omega.dto.tag.TagDto;
+import it.aleph.omega.dto.tag.UpdateTagDto;
 
 import java.util.List;
 

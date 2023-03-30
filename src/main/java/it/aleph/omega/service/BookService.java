@@ -1,9 +1,9 @@
 package it.aleph.omega.service;
 
-import it.aleph.omega.dto.AssociateBookDto;
-import it.aleph.omega.dto.BookDto;
-import it.aleph.omega.dto.CreateBookDto;
-import it.aleph.omega.dto.UpdateBookDto;
+import it.aleph.omega.dto.book.AssociateBookDto;
+import it.aleph.omega.dto.book.BookDto;
+import it.aleph.omega.dto.book.CreateBookDto;
+import it.aleph.omega.dto.book.UpdateBookDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

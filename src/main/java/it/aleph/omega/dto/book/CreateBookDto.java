@@ -1,4 +1,4 @@
-package it.aleph.omega.dto;
+package it.aleph.omega.dto.book;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
