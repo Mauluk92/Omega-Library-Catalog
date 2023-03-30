@@ -1,6 +1,8 @@
 package it.aleph.omega.service.impl;
 
 import it.aleph.omega.dto.AuthorDto;
+import it.aleph.omega.dto.CreateAuthorDto;
+import it.aleph.omega.dto.UpdateAuthorDto;
 import it.aleph.omega.exception.ResourceNotFoundException;
 import it.aleph.omega.mapper.AuthorDtoMapper;
 import it.aleph.omega.model.Author;
@@ -24,8 +26,8 @@ public class AuthorServiceImpl implements AuthorService {
 
 
     @Override
-    public AuthorDto addAuthor(AuthorDto authorDto) {
-        Author entity = authorDtoMapper.toEntity(authorDto);
+    public AuthorDto addAuthor(CreateAuthorDto createAuthorDto) {
+        Author entity = authorDtoMapper.toEntity(createAuthorDto);
         authorRepository.save(entity);
         return authorDtoMapper.toDto(entity);
     }
@@ -43,7 +45,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public AuthorDto updateAuthorById(Long id, AuthorDto updated) {
+    public AuthorDto updateAuthorById(Long id, UpdateAuthorDto updated) {
         Author authorObtained = authorRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         authorDtoMapper.update(authorObtained, updated);
         authorRepository.save(authorObtained);
