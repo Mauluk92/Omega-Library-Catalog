@@ -1,5 +1,6 @@
 package it.aleph.omega.controller;
 
+import it.aleph.omega.dto.AssociateBookDto;
 import it.aleph.omega.dto.BookDto;
 import it.aleph.omega.service.BookService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,10 @@ public class BookController {
     @PatchMapping("/book/{id}")
     public BookDto updateBookStatus(@PathVariable("id") Long id,@RequestBody Boolean status){
         return bookService.updateBookStatus(id, status);
+    }
+    @PatchMapping("/book/associate/{id}")
+    public BookDto associateBook(@PathVariable("id") Long id, @RequestBody AssociateBookDto associateBookDto){
+        return bookService.associateBook(id, associateBookDto);
     }
 
     @DeleteMapping("/book/{id}")

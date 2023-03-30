@@ -1,12 +1,10 @@
 package it.aleph.omega.dto;
 
-import com.fasterxml.jackson.annotation.*;
-import it.aleph.omega.model.Book;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.Instant;
-import java.util.List;
 
 @Data
 public class AuthorDto {
@@ -18,8 +16,5 @@ public class AuthorDto {
     private Instant dateOfBirth;
     @NotNull
     private String biography;
-
-    @JsonIgnoreProperties(value="authorList")
-    private List<Book> bookList;
 
 }

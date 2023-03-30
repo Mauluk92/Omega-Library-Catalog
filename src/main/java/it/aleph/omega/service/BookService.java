@@ -1,5 +1,6 @@
 package it.aleph.omega.service;
 
+import it.aleph.omega.dto.AssociateBookDto;
 import it.aleph.omega.dto.BookDto;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,6 +13,7 @@ public interface BookService {
     BookDto updateBookStatus(Long id, Boolean status);
     BookDto getBookById(Long id);
     void removeBookById(Long id);
+    BookDto associateBook(Long id, AssociateBookDto associateBookDto);
 
 
     List<BookDto> filteredBookSearch(Integer pageSize, Integer pageNum, Long authorId, Long tagId, String title);
