@@ -1,9 +1,6 @@
 package it.aleph.omega.service.impl;
 
-import it.aleph.omega.dto.book.AssociateBookDto;
-import it.aleph.omega.dto.book.BookDto;
-import it.aleph.omega.dto.book.CreateBookDto;
-import it.aleph.omega.dto.book.UpdateBookDto;
+import it.aleph.omega.dto.book.*;
 import it.aleph.omega.exception.ResourceNotFoundException;
 import it.aleph.omega.mapper.BookDtoMapper;
 import it.aleph.omega.model.Author;
@@ -13,10 +10,12 @@ import it.aleph.omega.repository.AuthorRepository;
 import it.aleph.omega.repository.BookRepository;
 import it.aleph.omega.repository.TagRepository;
 import it.aleph.omega.service.BookService;
+import it.aleph.omega.specification.SpecificationBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,6 +30,8 @@ public class BookServiceImpl implements BookService {
     private final AuthorRepository authorRepository;
     private final TagRepository tagRepository;
     private final BookDtoMapper bookDtoMapper;
+
+    private final List<SpecificationBuilder> specificationBuilderList;
 
     @Override
     public BookDto addBook(CreateBookDto createBookDto) {
@@ -80,9 +81,20 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDto> filteredBookSearch(Integer pageSize, Integer pageNum, Long authorId, Long tagId, String title) {
+        SearchBooksDto searchBooksDto = SearchBooksDto.builder().authorId(authorId).tagId(tagId).title(title).build();
         Pageable pageable = PageRequest.of(pageNum, pageSize);
-        Page<Book> pageOfBooks = bookRepository.findAll(pageable);
-        return bookDtoMapper.toBookDtoList(pageOfBooks.get().collect(Collectors.toList()));
+        List<Specification<Book>> specificationList = specificationBuilderList.stream()
+                .map(specificationBuilder -> specificationBuilder
+                        .setFilter(searchBooksDto)
+                        .build())
+                .collect(Collectors.toList());
+        Page<Book> page = bookRepository
+                .findAll(specificationList
+                                .stream()
+                                .reduce(Specification::and)
+                                .orElse(null),
+                        pageable);
+        return bookDtoMapper.toBookDtoList(page.get().collect(Collectors.toList()));
     }
 
     @Override
