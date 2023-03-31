@@ -48,11 +48,11 @@ public class BookController {
     }
 
     @GetMapping("/books")
-    public List<BookDto> filteredBookSearch(@RequestParam Integer pageNum,
-                                            @RequestParam Integer pageSize,
-                                            @RequestParam Long authorId,
-                                            @RequestParam Long tagId,
-                                            @RequestParam String title){
+    public List<BookDto> filteredBookSearch(@RequestParam(defaultValue = "0") Integer pageNum,
+                                            @RequestParam(defaultValue = "10") Integer pageSize,
+                                            @RequestParam(required = false) Long authorId,
+                                            @RequestParam(required = false) Long tagId,
+                                            @RequestParam(required = false) String title){
         return bookService.filteredBookSearch(pageSize, pageNum, authorId, tagId, title);
     }
 
