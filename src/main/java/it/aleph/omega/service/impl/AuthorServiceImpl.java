@@ -1,6 +1,9 @@
 package it.aleph.omega.service.impl;
 
-import it.aleph.omega.dto.AuthorDto;
+import it.aleph.omega.dto.author.AuthorDto;
+import it.aleph.omega.dto.author.CreateAuthorDto;
+import it.aleph.omega.dto.author.UpdateAuthorDto;
+import it.aleph.omega.exception.ResourceNotFoundException;
 import it.aleph.omega.mapper.AuthorDtoMapper;
 import it.aleph.omega.model.Author;
 import it.aleph.omega.repository.AuthorRepository;
@@ -23,30 +26,30 @@ public class AuthorServiceImpl implements AuthorService {
 
 
     @Override
-    public AuthorDto addAuthor(AuthorDto authorDto) {
-        Author entity = authorDtoMapper.toEntity(authorDto);
+    public AuthorDto addAuthor(CreateAuthorDto createAuthorDto) {
+        Author entity = authorDtoMapper.toEntity(createAuthorDto);
         authorRepository.save(entity);
-        return authorDto;
+        return authorDtoMapper.toDto(entity);
     }
 
     @Override
     public AuthorDto getAuthorById(Long id) {
-        Author authorObtained = authorRepository.findById(id).orElseThrow(RuntimeException::new);
+        Author authorObtained = authorRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         return authorDtoMapper.toDto(authorObtained);
     }
 
     @Override
     public void removeAuthorById(Long id) {
-        Author authorObtained = authorRepository.findById(id).orElseThrow(RuntimeException::new);
+        Author authorObtained = authorRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         authorRepository.delete(authorObtained);
     }
 
     @Override
-    public AuthorDto updateAuthorById(Long id, AuthorDto updated) {
-        Author authorObtained = authorRepository.findById(id).orElseThrow(RuntimeException::new);
+    public AuthorDto updateAuthorById(Long id, UpdateAuthorDto updated) {
+        Author authorObtained = authorRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         authorDtoMapper.update(authorObtained, updated);
         authorRepository.save(authorObtained);
-        return updated;
+        return authorDtoMapper.toDto(authorObtained);
     }
 
     @Override

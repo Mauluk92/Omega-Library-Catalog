@@ -1,1 +1,10 @@
-
+spring:
+  datasource:
+    url:
+    username:
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+server:
+  error:
+    include-message: always
+    include-binding-errors: always

@@ -1,12 +1,10 @@
 package it.aleph.omega.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.Instant;
+import java.util.List;
 
 @Data
 @Entity
@@ -18,4 +16,8 @@ public class Author {
     private String name;
     private Instant dateOfBirth;
     private String biography;
+
+    @ManyToMany(mappedBy = "authorList")
+    private List<Book> bookList;
+
 }
