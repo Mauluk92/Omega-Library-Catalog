@@ -7,13 +7,15 @@ import it.aleph.omega.dto.tag.TagDto;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.Instant;
 import java.util.List;
 
 @Data
+@EqualsAndHashCode
 public class BookDto {
-    @JsonProperty(access= JsonProperty.Access.READ_ONLY)
+    @NotNull
     private Long id;
     @NotNull
     private String title;

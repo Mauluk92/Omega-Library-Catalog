@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class TagDto {
-    @JsonProperty(access= JsonProperty.Access.READ_ONLY)
+    @NotNull
     private Long id;
     @NotNull
     private String tag;
