@@ -13,7 +13,6 @@ import java.time.Instant;
 import java.util.List;
 
 @Data
-@EqualsAndHashCode
 public class BookDto {
     @NotNull
     private Long id;

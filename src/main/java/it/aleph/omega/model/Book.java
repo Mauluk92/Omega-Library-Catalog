@@ -9,7 +9,6 @@ import java.util.List;
 
 @Data
 @Entity
-@EqualsAndHashCode
 public class Book {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
