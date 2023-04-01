@@ -96,15 +96,13 @@ public class AuthorServiceImplTest {
         entity.setId(1L);
         UpdateAuthorDto updateAuthorDto = MAPPER.convertValue(CREATE_BASE_AUTHOR_DTO, UpdateAuthorDto.class);
         updateAuthorDto.setBiography("Correct biography");
-        Author updatedEntity = MAPPER.convertValue(updateAuthorDto, Author.class);
-        updatedEntity.setId(1L);
         Author updatedSavedEntity = MAPPER.convertValue(updateAuthorDto, Author.class);
         updatedSavedEntity.setId(1L);
         AuthorDto authorDto = MAPPER.convertValue(entity, AuthorDto.class);
         authorDto.setBiography("Correct biography");
 
         Mockito.when(authorRepository.findById(1L)).thenReturn(Optional.of(entity));
-        Mockito.when(authorRepository.save(updatedEntity)).thenReturn(updatedSavedEntity);
+        Mockito.when(authorRepository.save(updatedSavedEntity)).thenReturn(updatedSavedEntity);
 
         Assertions.assertEquals(authorDto, authorService.updateAuthorById(1L, updateAuthorDto));
     }

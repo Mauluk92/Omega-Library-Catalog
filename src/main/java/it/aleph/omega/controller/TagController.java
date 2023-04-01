@@ -26,6 +26,9 @@ public class TagController {
         return tagService.getTagById(id);
     }
 
+    @DeleteMapping("/tag/{id}")
+    public void deleteTagById(@PathVariable Long id){ tagService.removeTagById(id);}
+
     @PutMapping("/tag/{id}")
     public TagDto updateTagById(@PathVariable Long id, @RequestBody @Valid UpdateTagDto updateTagDto){
         return tagService.updateTagById(id, updateTagDto);

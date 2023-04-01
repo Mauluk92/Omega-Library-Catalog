@@ -27,14 +27,19 @@ public class TagServiceImpl implements TagService {
     @Override
     public TagDto addTag(CreateTagDto createTagDto) {
         Tag entity = tagDtoMapper.toEntity(createTagDto);
-        tagRepository.save(entity);
-        return tagDtoMapper.toDto(entity);
+        return tagDtoMapper.toDto(tagRepository.save(entity));
     }
 
     @Override
     public TagDto getTagById(Long id) {
         Tag tagObtained = tagRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         return tagDtoMapper.toDto(tagObtained);
+    }
+
+    @Override
+    public void removeTagById(Long id) {
+        Tag tagObtained = tagRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        tagRepository.delete(tagObtained);
     }
 
     @Override

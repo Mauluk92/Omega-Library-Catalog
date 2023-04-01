@@ -10,6 +10,7 @@ import it.aleph.omega.dto.book.BookDto;
 import it.aleph.omega.dto.book.CreateBookDto;
 import it.aleph.omega.dto.book.UpdateBookDto;
 import it.aleph.omega.dto.tag.TagDto;
+import it.aleph.omega.exception.ResourceNotFoundException;
 import it.aleph.omega.mapper.BookDtoMapper;
 import it.aleph.omega.model.Author;
 import it.aleph.omega.model.Book;
@@ -202,6 +203,20 @@ public class BookServiceImplTest {
                 .thenReturn(bookPage);
 
         Assertions.assertEquals(List.of(bookDto), bookService.filteredBookSearch(10, 0, null, null, null));
+
+    }
+
+    @DisplayName("Delete book by id")
+    @Test
+    public void removeBookByIdTest(){
+        Book entity = MAPPER.convertValue(CREATE_BASE_BOOK_DTO, Book.class);
+        entity.setId(1L);
+
+        Mockito.when(bookRepository.findById(1L)).thenReturn(Optional.of(entity));
+
+        bookService.removeBookById(1L);
+
+        Assertions.assertDoesNotThrow(ResourceNotFoundException::new);
 
     }
 }
