@@ -10,6 +10,8 @@ public interface TagService {
 
     TagDto addTag(CreateTagDto createTagDto);
     TagDto getTagById(Long id);
+
+    void removeTagById(Long id);
     TagDto updateTagById(Long id, UpdateTagDto updateTagDto);
     List<TagDto> getAllTags(Integer pageNum, Integer pageSize, String tag);
 
