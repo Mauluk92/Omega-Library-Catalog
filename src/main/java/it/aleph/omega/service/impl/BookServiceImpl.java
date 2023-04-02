@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,7 +32,7 @@ public class BookServiceImpl implements BookService {
     private final TagRepository tagRepository;
     private final BookDtoMapper bookDtoMapper;
 
-    private final List<SpecificationBuilder> specificationBuilderList;
+    private final List<SpecificationBuilder<SearchBooksDto, Book>> specificationBuilderList;
 
     @Override
     public BookDto addBook(CreateBookDto createBookDto) {
@@ -80,20 +81,31 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDto> filteredBookSearch(Integer pageSize, Integer pageNum, Long authorId, Long tagId, String title) {
-        SearchBooksDto searchBooksDto = SearchBooksDto.builder().authorId(authorId).tagId(tagId).title(title).build();
+        SearchBooksDto searchBooksDto = SearchBooksDto
+                .builder()
+                .authorId(authorId)
+                .tagId(tagId)
+                .title(title)
+                .build();
+        Sort sort = Sort.by("title");
+        Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
+        Page<Book> page = bookRepository.findAll(buildSpecification(searchBooksDto), pageable);
+        return bookDtoMapper.toBookDtoList(page.toList());
+    }
+
+    @Override
+    public List<BookDto> orphanedBooksSearch(Integer pageSize, Integer pageNum) {
         Pageable pageable = PageRequest.of(pageNum, pageSize);
-        List<Specification<Book>> specificationList = specificationBuilderList.stream()
+        Page<Book> page = bookRepository.findOrphanedBooks(pageable);
+        return bookDtoMapper.toBookDtoList(page.toList());
+
+    }
+
+    private Specification<Book> buildSpecification(SearchBooksDto searchBooksDto){
+        return specificationBuilderList.stream()
                 .map(specificationBuilder -> specificationBuilder
                         .setFilter(searchBooksDto)
-                        .build())
-                .collect(Collectors.toList());
-        Page<Book> page = bookRepository
-                .findAll(specificationList
-                                .stream()
-                                .reduce(Specification::and)
-                                .orElse(null),
-                        pageable);
-        return bookDtoMapper.toBookDtoList(page.get().collect(Collectors.toList()));
+                        .build()).reduce(Specification::and).orElse(null);
     }
 
     @Override

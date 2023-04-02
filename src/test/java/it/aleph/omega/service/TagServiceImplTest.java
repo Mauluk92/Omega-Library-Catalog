@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import it.aleph.omega.annotation.ServiceTest;
 import it.aleph.omega.dto.tag.CreateTagDto;
+import it.aleph.omega.dto.tag.SearchTagsDto;
 import it.aleph.omega.dto.tag.TagDto;
 import it.aleph.omega.dto.tag.UpdateTagDto;
 import it.aleph.omega.exception.ResourceNotFoundException;
@@ -12,6 +13,7 @@ import it.aleph.omega.mapper.TagDtoMapper;
 import it.aleph.omega.model.Tag;
 import it.aleph.omega.repository.TagRepository;
 import it.aleph.omega.service.impl.TagServiceImpl;
+import it.aleph.omega.specification.SpecificationBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -24,7 +26,9 @@ import org.mockito.Spy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +45,9 @@ public class TagServiceImplTest {
 
     @Spy
     TagDtoMapper tagDtoMapper = Mappers.getMapper(TagDtoMapper.class);
+
+    @Spy
+    List<SpecificationBuilder<SearchTagsDto, Tag>> specificationBuilderList = new ArrayList<>();
 
     @BeforeAll
     public static void initAll(){
@@ -121,7 +128,7 @@ public class TagServiceImplTest {
 
         Page<Tag> pageTags = new PageImpl<>(List.of(entity));
 
-        Mockito.when(tagRepository.findAll(PageRequest.of(0, 10))).thenReturn(pageTags);
+        Mockito.when(tagRepository.findAll((Specification<Tag>) null,PageRequest.of(0, 10))).thenReturn(pageTags);
 
         Assertions.assertEquals(List.of(tagDto), tagService.getAllTags(0, 10, null));
     }

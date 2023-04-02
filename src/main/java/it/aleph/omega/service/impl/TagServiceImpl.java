@@ -1,6 +1,7 @@
 package it.aleph.omega.service.impl;
 
 import it.aleph.omega.dto.tag.CreateTagDto;
+import it.aleph.omega.dto.tag.SearchTagsDto;
 import it.aleph.omega.dto.tag.TagDto;
 import it.aleph.omega.dto.tag.UpdateTagDto;
 import it.aleph.omega.exception.ResourceNotFoundException;
@@ -8,10 +9,12 @@ import it.aleph.omega.mapper.TagDtoMapper;
 import it.aleph.omega.model.Tag;
 import it.aleph.omega.repository.TagRepository;
 import it.aleph.omega.service.TagService;
+import it.aleph.omega.specification.SpecificationBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +26,8 @@ public class TagServiceImpl implements TagService {
 
     private final TagRepository tagRepository;
     private final TagDtoMapper tagDtoMapper;
+
+    private final List<SpecificationBuilder<SearchTagsDto, Tag>> specificationBuilderList;
 
     @Override
     public TagDto addTag(CreateTagDto createTagDto) {
@@ -53,7 +58,16 @@ public class TagServiceImpl implements TagService {
     @Override
     public List<TagDto> getAllTags(Integer pageNum, Integer pageSize, String tag) {
         Pageable pageable = PageRequest.of(pageNum, pageSize);
-        Page<Tag> pageOfTags = tagRepository.findAll(pageable);
-        return tagDtoMapper.toDtoList(pageOfTags.get().collect(Collectors.toList()));
+        SearchTagsDto searchTagsDto = SearchTagsDto.builder().tag(tag).build();
+        Page<Tag> pageOfTags = tagRepository.findAll(buildSpecification(searchTagsDto),pageable);
+        return tagDtoMapper.toDtoList(pageOfTags.toList());
+    }
+
+    private Specification<Tag> buildSpecification(SearchTagsDto searchTagsDto){
+        return specificationBuilderList.stream()
+                .map(specificationBuilder ->
+                        specificationBuilder.setFilter(searchTagsDto).build())
+                .reduce(Specification::and)
+                .orElse(null);
     }
 }

@@ -37,8 +37,8 @@ public class AuthorController {
     }
 
     @GetMapping("/authors")
-    public List<AuthorDto> searchAuthors(@RequestParam Integer pageNum,
-                                         @RequestParam Integer pageSize,
+    public List<AuthorDto> searchAuthors(@RequestParam(defaultValue = "0") Integer pageNum,
+                                         @RequestParam(defaultValue = "10")Integer pageSize,
                                          @RequestParam String name){
         return authorService.searchAuthors(pageSize, pageNum, name);
     }

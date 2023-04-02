@@ -12,7 +12,6 @@ public class AuthorDto {
     private Long id;
     @NotNull
     private String name;
-    private Instant dateOfBirth;
     @NotNull
     private String biography;
 

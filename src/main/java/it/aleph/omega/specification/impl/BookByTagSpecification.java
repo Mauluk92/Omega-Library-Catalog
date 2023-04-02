@@ -13,13 +13,13 @@ import java.util.Objects;
 
 @Data
 @Component
-public class BookByTagSpecification implements Specification<Book>, SpecificationBuilder {
+public class BookByTagSpecification implements Specification<Book>, SpecificationBuilder<SearchBooksDto, Book> {
     private SearchBooksDto searchBooksDto;
     private final String TAG_FIELD_IN_BOOK = "tagList";
     private final String TAG_FIELD = "id";
 
     @Override
-    public SpecificationBuilder setFilter(SearchBooksDto searchBooksDto) {
+    public SpecificationBuilder<SearchBooksDto, Book> setFilter(SearchBooksDto searchBooksDto) {
         this.searchBooksDto = searchBooksDto;
         return this;
     }
@@ -28,7 +28,7 @@ public class BookByTagSpecification implements Specification<Book>, Specificatio
         Join<Book, Tag> booksByTag = root.join(TAG_FIELD_IN_BOOK);
         return Objects.nonNull(searchBooksDto.getTagId())
                 ? criteriaBuilder.equal(booksByTag.get(TAG_FIELD), searchBooksDto.getTagId())
-                : null;
+                : criteriaBuilder.conjunction();
     }
 
     @Override
