@@ -56,6 +56,12 @@ public class BookController {
         return bookService.filteredBookSearch(pageSize, pageNum, authorId, tagId, title);
     }
 
+    @GetMapping("/books/orphaned")
+    public List<BookDto> orphanedBooksSearch(@RequestParam(defaultValue = "0") Integer pageNum,
+                                            @RequestParam(defaultValue = "10") Integer pageSize){
+        return bookService.orphanedBooksSearch(pageSize, pageNum);
+    }
+
     @PostMapping("/books")
     public void addBooks(@RequestParam("fileCsv") MultipartFile file){
         bookService.addBooks(file);

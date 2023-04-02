@@ -20,6 +20,8 @@ public interface BookService {
 
     List<BookDto> filteredBookSearch(Integer pageSize, Integer pageNum, Long authorId, Long tagId, String title);
 
+    List<BookDto> orphanedBooksSearch(Integer pageSize, Integer pageNum);
+
     void addBooks(MultipartFile fileCsv);
 
 }

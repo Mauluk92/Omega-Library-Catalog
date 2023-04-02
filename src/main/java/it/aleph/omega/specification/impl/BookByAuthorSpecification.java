@@ -12,14 +12,14 @@ import org.springframework.stereotype.Component;
 import java.util.Objects;
 @Data
 @Component
-public class BookByAuthorSpecification implements Specification<Book>, SpecificationBuilder {
+public class BookByAuthorSpecification implements Specification<Book>, SpecificationBuilder<SearchBooksDto, Book> {
 
     private SearchBooksDto searchBooksDto;
     private final String AUTHOR_FIELD_IN_BOOK = "authorList";
     private final String AUTHOR_FIELD = "id";
 
     @Override
-    public SpecificationBuilder setFilter(SearchBooksDto searchBooksDto) {
+    public SpecificationBuilder<SearchBooksDto, Book> setFilter(SearchBooksDto searchBooksDto) {
         this.searchBooksDto = searchBooksDto;
         return this;
     }
@@ -29,7 +29,7 @@ public class BookByAuthorSpecification implements Specification<Book>, Specifica
         Join<Book, Author> booksByAuthor = root.join(AUTHOR_FIELD_IN_BOOK);
         return Objects.nonNull(searchBooksDto.getAuthorId())
                 ? criteriaBuilder.equal(booksByAuthor.get(AUTHOR_FIELD), searchBooksDto.getAuthorId())
-                : null;
+                : criteriaBuilder.conjunction();
     }
 
     @Override

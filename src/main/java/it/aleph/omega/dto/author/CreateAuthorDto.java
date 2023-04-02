@@ -9,7 +9,6 @@ public class CreateAuthorDto {
 
     @NotNull
     private String name;
-    private Instant dateOfBirth;
     @NotNull
     private String biography;
 }
