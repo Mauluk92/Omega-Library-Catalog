@@ -1,9 +1,6 @@
 package it.aleph.omega.controller;
 
-import it.aleph.omega.dto.book.AssociateBookDto;
-import it.aleph.omega.dto.book.BookDto;
-import it.aleph.omega.dto.book.CreateBookDto;
-import it.aleph.omega.dto.book.UpdateBookDto;
+import it.aleph.omega.dto.book.*;
 import it.aleph.omega.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -62,9 +59,9 @@ public class BookController {
         return bookService.orphanedBooksSearch(pageSize, pageNum);
     }
 
-    @PostMapping("/books")
-    public void addBooks(@RequestParam("fileCsv") MultipartFile file){
-        bookService.addBooks(file);
+    @PatchMapping("/books")
+    public List<BookDto> patchBooks(@RequestBody @Valid PatchBooksDto patchBooksDto){
+        return bookService.patchBooks(patchBooksDto);
     }
 
 }

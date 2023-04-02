@@ -17,8 +17,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -101,15 +103,25 @@ public class BookServiceImpl implements BookService {
 
     }
 
+    @Override
+    public List<BookDto> patchBooks(PatchBooksDto patchBooksDto) {
+        List<Book> foundBookList = bookRepository.findByIdIn(patchBooksDto.getBookIdList());
+        foundBookList.forEach(book -> book.setAvailable(patchBooksDto.getUpdatedStatus()));
+        List<Long> foundBookIdList = foundBookList.stream().map(Book::getId).collect(Collectors.toList());
+        patchBooksDto.getBookIdList().removeAll(foundBookIdList);
+        if(!patchBooksDto.getBookIdList().isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "The following ids were not found: " +
+                            patchBooksDto.getBookIdList());
+        }
+        return bookDtoMapper.toBookDtoList(bookRepository.saveAll(foundBookList));
+
+    }
+
     private Specification<Book> buildSpecification(SearchBooksDto searchBooksDto){
         return specificationBuilderList.stream()
                 .map(specificationBuilder -> specificationBuilder
                         .setFilter(searchBooksDto)
                         .build()).reduce(Specification::and).orElse(null);
-    }
-
-    @Override
-    public void addBooks(MultipartFile fileCsv) {
-
     }
 }

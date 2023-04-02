@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -58,7 +59,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public List<AuthorDto> searchAuthors(Integer pageSize, Integer pageNum, String name) {
-        Pageable pageable = PageRequest.of(pageNum, pageSize);
+        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by("name"));
         SearchAuthorsDto searchAuthorsDto = SearchAuthorsDto.builder().name(name).build();
         Page<Author> pageAuthors = authorRepository.findAll(buildSpecification(searchAuthorsDto), pageable);
         return authorDtoMapper.toDtoList(pageAuthors.toList());
