@@ -1,12 +1,15 @@
 package it.aleph.omega.controller;
 
+import com.google.zxing.WriterException;
 import it.aleph.omega.dto.book.*;
 import it.aleph.omega.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -18,6 +21,11 @@ public class BookController {
     @PostMapping("/book")
     public BookDto addBook(@RequestBody @Valid CreateBookDto createBookDto){
         return bookService.addBook(createBookDto);
+    }
+
+    @GetMapping(value = "/book/{id}/QRCODE", produces = {MediaType.IMAGE_PNG_VALUE})
+    public @ResponseBody byte[] getQRCode(@PathVariable Long id) throws IOException, WriterException {
+        return bookService.getQRCodeBook(id);
     }
 
     @GetMapping("/book/{id}")
