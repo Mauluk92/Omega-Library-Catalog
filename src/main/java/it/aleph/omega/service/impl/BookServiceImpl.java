@@ -1,11 +1,13 @@
 package it.aleph.omega.service.impl;
 
+import com.google.zxing.WriterException;
 import it.aleph.omega.dto.book.*;
 import it.aleph.omega.exception.ResourceNotFoundException;
 import it.aleph.omega.mapper.BookDtoMapper;
 import it.aleph.omega.model.Author;
 import it.aleph.omega.model.Book;
 import it.aleph.omega.model.Tag;
+import it.aleph.omega.qrcode.QrCodeBuilder;
 import it.aleph.omega.repository.AuthorRepository;
 import it.aleph.omega.repository.BookRepository;
 import it.aleph.omega.repository.TagRepository;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +39,8 @@ public class BookServiceImpl implements BookService {
 
     private final List<SpecificationBuilder<SearchBooksDto, Book>> specificationBuilderList;
 
+    private final QrCodeBuilder qrCodeBuilder;
+
     @Override
     public BookDto addBook(CreateBookDto createBookDto) {
         Book book = bookDtoMapper.toEntity(createBookDto);
@@ -48,6 +53,11 @@ public class BookServiceImpl implements BookService {
         bookDtoMapper.updateBook(obtainedBook, updateBookDto);
         bookRepository.save(obtainedBook);
         return bookDtoMapper.toDto(obtainedBook);
+    }
+
+    @Override
+    public byte[] getQRCodeBook(Long id) throws IOException, WriterException {
+        return qrCodeBuilder.produceQRCode(bookRepository.findById(id).orElseThrow(ResourceNotFoundException::new));
     }
 
     @Override
