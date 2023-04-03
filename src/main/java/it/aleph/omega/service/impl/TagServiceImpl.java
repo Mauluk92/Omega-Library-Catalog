@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -57,7 +58,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<TagDto> getAllTags(Integer pageNum, Integer pageSize, String tag) {
-        Pageable pageable = PageRequest.of(pageNum, pageSize);
+        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by("tag"));
         SearchTagsDto searchTagsDto = SearchTagsDto.builder().tag(tag).build();
         Page<Tag> pageOfTags = tagRepository.findAll(buildSpecification(searchTagsDto),pageable);
         return tagDtoMapper.toDtoList(pageOfTags.toList());

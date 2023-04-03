@@ -230,4 +230,26 @@ public class BookServiceImplTest {
         Assertions.assertEquals(List.of(bookDto), bookService.orphanedBooksSearch(10, 0));
 
     }
+
+    @DisplayName("Patch multiple books test")
+    @Test
+    public void patchBooksStatusTest(){
+        Book entity = MAPPER.convertValue(CREATE_BASE_BOOK_DTO, Book.class);
+        entity.setId(1L);
+        Book updatedEntity = MAPPER.convertValue(entity, Book.class);
+        updatedEntity.setAvailable(false);
+        BookDto bookDto = MAPPER.convertValue(entity, BookDto.class);
+        bookDto.setAvailable(false);
+        PatchBooksDto patchBooksDto = new PatchBooksDto();
+        List<Long> idList = new ArrayList<>();
+        idList.add(1L);
+        patchBooksDto.setBookIdList(idList);
+        patchBooksDto.setUpdatedStatus(false);
+
+        Mockito.when(bookRepository.findByIdIn(patchBooksDto.getBookIdList())).thenReturn(List.of(entity));
+        Mockito.when(bookRepository.saveAll(List.of(updatedEntity))).thenReturn(List.of(updatedEntity));
+
+        Assertions.assertEquals(List.of(bookDto), bookService.patchBooks(patchBooksDto));
+
+    }
 }

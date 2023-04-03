@@ -26,6 +26,7 @@ import org.mockito.Spy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
@@ -123,7 +124,7 @@ public class AuthorServiceImplTest {
 
         Page<Author> pageAuthor = new PageImpl<>(List.of(entity));
 
-        Mockito.when(authorRepository.findAll((Specification<Author>) null,PageRequest.of(0, 10))).thenReturn(pageAuthor);
+        Mockito.when(authorRepository.findAll((Specification<Author>) null,PageRequest.of(0, 10, Sort.by("name")))).thenReturn(pageAuthor);
 
         Assertions.assertEquals(List.of(authorDto), authorService.searchAuthors(10, 0, null));
     }

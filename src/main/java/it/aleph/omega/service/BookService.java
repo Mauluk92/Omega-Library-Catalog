@@ -1,9 +1,6 @@
 package it.aleph.omega.service;
 
-import it.aleph.omega.dto.book.AssociateBookDto;
-import it.aleph.omega.dto.book.BookDto;
-import it.aleph.omega.dto.book.CreateBookDto;
-import it.aleph.omega.dto.book.UpdateBookDto;
+import it.aleph.omega.dto.book.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -22,6 +19,6 @@ public interface BookService {
 
     List<BookDto> orphanedBooksSearch(Integer pageSize, Integer pageNum);
 
-    void addBooks(MultipartFile fileCsv);
+    List<BookDto> patchBooks(PatchBooksDto patchBooksDto);
 
 }

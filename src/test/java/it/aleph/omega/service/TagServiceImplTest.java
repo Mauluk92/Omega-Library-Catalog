@@ -26,6 +26,7 @@ import org.mockito.Spy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
@@ -128,7 +129,7 @@ public class TagServiceImplTest {
 
         Page<Tag> pageTags = new PageImpl<>(List.of(entity));
 
-        Mockito.when(tagRepository.findAll((Specification<Tag>) null,PageRequest.of(0, 10))).thenReturn(pageTags);
+        Mockito.when(tagRepository.findAll((Specification<Tag>) null,PageRequest.of(0, 10, Sort.by("tag")))).thenReturn(pageTags);
 
         Assertions.assertEquals(List.of(tagDto), tagService.getAllTags(0, 10, null));
     }

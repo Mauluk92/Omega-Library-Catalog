@@ -24,4 +24,6 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
     )
     Page<Book> findOrphanedBooks(Pageable pageable);
 
+    List<Book> findByIdIn(List<Long> ids);
+
 }
