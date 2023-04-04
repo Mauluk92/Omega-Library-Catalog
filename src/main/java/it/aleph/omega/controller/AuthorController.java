@@ -6,6 +6,7 @@ import it.aleph.omega.dto.author.UpdateAuthorDto;
 import it.aleph.omega.service.AuthorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class AuthorController {
     private final AuthorService authorService;
 
     @PostMapping("/author")
+    @ResponseStatus(HttpStatus.CREATED)
     public AuthorDto addAuthor(@RequestBody @Valid CreateAuthorDto createAuthorDto){
         return authorService.addAuthor(createAuthorDto);
     }
@@ -27,6 +29,7 @@ public class AuthorController {
     }
 
     @DeleteMapping("/author/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeAuthorById(@PathVariable Long id){
         authorService.removeAuthorById(id);
     }
