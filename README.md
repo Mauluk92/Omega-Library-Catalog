@@ -104,7 +104,7 @@ The server starts by default at 9090 port of localhost.
 
 I've used a MySQL relational database, and i have included the E-R diagram for clarity here(together withe script to be used to generate the tables and schema)
 
-![E-R-Diagram](../omega/src/main/resources/static/omega-catalog-E-R.png)
+![E-R-Diagram](https://github.com/Mauluk92/Omega-Library-Catalog/blob/main/src/main/resources/static/omega-catalog-E-R.png)
 
 I've used two many to many relationship to model the links between authors, tags and books via join tables.
 
