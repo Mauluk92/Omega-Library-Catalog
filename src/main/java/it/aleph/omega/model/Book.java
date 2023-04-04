@@ -3,6 +3,7 @@ package it.aleph.omega.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
@@ -19,6 +20,8 @@ public class Book {
     private Instant pubDate;
     private String pubHouse;
     private Boolean available;
+
+    private BigDecimal price;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "book_author",

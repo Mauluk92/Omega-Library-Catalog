@@ -1,0 +1,14 @@
+syntax="proto3";
+
+package book;
+import "google/protobuf/empty.proto";
+
+service BookProtoService {
+  rpc setAvailableBookStream(BookPatchRequest) returns (google.protobuf.Empty);
+}
+
+message BookPatchRequest {
+  repeated int64 bookId = 1;
+  bool updatedStatus = 2;
+}
+

@@ -8,12 +8,10 @@ import java.time.Instant;
 
 @Data
 public class AuthorDto {
-
-    @JsonProperty(access= JsonProperty.Access.READ_ONLY)
+    @NotNull
     private Long id;
     @NotNull
     private String name;
-    private Instant dateOfBirth;
     @NotNull
     private String biography;
 

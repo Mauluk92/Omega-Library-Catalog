@@ -14,7 +14,6 @@ public class Author {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private Instant dateOfBirth;
     private String biography;
 
     @ManyToMany(mappedBy = "authorList")

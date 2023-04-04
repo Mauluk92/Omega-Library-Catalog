@@ -15,21 +15,23 @@ import java.util.Objects;
 
 @Data
 @Component
-public class BookByTitleSpecification implements Specification<Book>, SpecificationBuilder {
+public class BookByTitleSpecification implements Specification<Book>, SpecificationBuilder<SearchBooksDto, Book> {
 
     private SearchBooksDto searchBooksDto;
     private final String BOOK_FIELD = "title";
 
 
     @Override
-    public SpecificationBuilder setFilter(SearchBooksDto searchBooksDto) {
+    public SpecificationBuilder<SearchBooksDto, Book> setFilter(SearchBooksDto searchBooksDto) {
         this.searchBooksDto = searchBooksDto;
         return this;
     }
 
     @Override
     public Predicate toPredicate(Root<Book> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-        return Objects.nonNull(searchBooksDto.getTitle()) ? criteriaBuilder.equal(root.get(BOOK_FIELD), searchBooksDto.getTitle()) : null;
+        return Objects.nonNull(searchBooksDto.getTitle()) ?
+                criteriaBuilder.equal(root.get(BOOK_FIELD), searchBooksDto.getTitle()) :
+                criteriaBuilder.conjunction();
     }
 
     @Override

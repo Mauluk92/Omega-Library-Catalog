@@ -7,13 +7,15 @@ import it.aleph.omega.dto.tag.TagDto;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
 @Data
 public class BookDto {
-    @JsonProperty(access= JsonProperty.Access.READ_ONLY)
+    @NotNull
     private Long id;
     @NotNull
     private String title;
@@ -31,9 +33,9 @@ public class BookDto {
     private String pubHouse;
     @NotNull
     private Boolean available;
-    @JsonIgnoreProperties(value="bookList")
+
+    private BigDecimal price;
     private List<AuthorDto> authorList;
-    @JsonIgnoreProperties(value="taggedBookList")
     private List<TagDto> tagList;
 
 }

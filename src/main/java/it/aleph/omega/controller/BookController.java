@@ -1,15 +1,15 @@
 package it.aleph.omega.controller;
 
-import it.aleph.omega.dto.book.AssociateBookDto;
-import it.aleph.omega.dto.book.BookDto;
-import it.aleph.omega.dto.book.CreateBookDto;
-import it.aleph.omega.dto.book.UpdateBookDto;
+import com.google.zxing.WriterException;
+import it.aleph.omega.dto.book.*;
 import it.aleph.omega.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -19,8 +19,14 @@ public class BookController {
     private final BookService bookService;
 
     @PostMapping("/book")
+    @ResponseStatus(HttpStatus.CREATED)
     public BookDto addBook(@RequestBody @Valid CreateBookDto createBookDto){
         return bookService.addBook(createBookDto);
+    }
+
+    @GetMapping(value = "/book/{id}/QRCODE", produces = {MediaType.IMAGE_PNG_VALUE})
+    public @ResponseBody byte[] getQRCode(@PathVariable Long id) throws IOException, WriterException {
+        return bookService.getQRCodeBook(id);
     }
 
     @GetMapping("/book/{id}")
@@ -38,6 +44,7 @@ public class BookController {
     }
 
     @DeleteMapping("/book/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeBookById(@PathVariable("id") Long id){
         bookService.removeBookById(id);
     }
@@ -56,9 +63,15 @@ public class BookController {
         return bookService.filteredBookSearch(pageSize, pageNum, authorId, tagId, title);
     }
 
-    @PostMapping("/books")
-    public void addBooks(@RequestParam("fileCsv") MultipartFile file){
-        bookService.addBooks(file);
+    @GetMapping("/books/orphaned")
+    public List<BookDto> orphanedBooksSearch(@RequestParam(defaultValue = "0") Integer pageNum,
+                                            @RequestParam(defaultValue = "10") Integer pageSize){
+        return bookService.orphanedBooksSearch(pageSize, pageNum);
+    }
+
+    @PatchMapping("/books")
+    public List<BookDto> patchBooks(@RequestBody @Valid PatchBooksDto patchBooksDto){
+        return bookService.patchBooks(patchBooksDto);
     }
 
 }
