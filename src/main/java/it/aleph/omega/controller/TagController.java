@@ -6,6 +6,7 @@ import it.aleph.omega.dto.tag.UpdateTagDto;
 import it.aleph.omega.service.TagService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class TagController {
     private final TagService tagService;
 
     @PostMapping("/tag")
+    @ResponseStatus(HttpStatus.CREATED)
     public TagDto addTag(@RequestBody @Valid CreateTagDto createTagDto){
         return tagService.addTag(createTagDto);
     }
@@ -27,6 +29,7 @@ public class TagController {
     }
 
     @DeleteMapping("/tag/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteTagById(@PathVariable Long id){ tagService.removeTagById(id);}
 
     @PutMapping("/tag/{id}")

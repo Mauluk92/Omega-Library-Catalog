@@ -5,6 +5,7 @@ import it.aleph.omega.dto.book.*;
 import it.aleph.omega.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,7 @@ public class BookController {
     private final BookService bookService;
 
     @PostMapping("/book")
+    @ResponseStatus(HttpStatus.CREATED)
     public BookDto addBook(@RequestBody @Valid CreateBookDto createBookDto){
         return bookService.addBook(createBookDto);
     }
@@ -42,6 +44,7 @@ public class BookController {
     }
 
     @DeleteMapping("/book/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeBookById(@PathVariable("id") Long id){
         bookService.removeBookById(id);
     }
