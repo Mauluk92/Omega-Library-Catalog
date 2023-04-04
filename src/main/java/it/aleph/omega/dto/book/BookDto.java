@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
@@ -32,9 +33,9 @@ public class BookDto {
     private String pubHouse;
     @NotNull
     private Boolean available;
-    @JsonIgnoreProperties(value="bookList")
+
+    private BigDecimal price;
     private List<AuthorDto> authorList;
-    @JsonIgnoreProperties(value="taggedBookList")
     private List<TagDto> tagList;
 
 }

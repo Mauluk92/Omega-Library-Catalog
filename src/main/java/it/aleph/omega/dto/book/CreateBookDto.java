@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 @Data
@@ -25,4 +26,6 @@ public class CreateBookDto {
     private String pubHouse;
     @NotNull
     private Boolean available;
+
+    private BigDecimal price;
 }
