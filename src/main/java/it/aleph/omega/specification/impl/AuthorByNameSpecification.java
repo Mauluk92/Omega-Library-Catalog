@@ -27,7 +27,7 @@ public class AuthorByNameSpecification implements Specification<Author>, Specifi
     @Override
     public Predicate toPredicate(Root<Author> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         return Objects.nonNull(searchAuthorsDto.getName()) ?
-                criteriaBuilder.equal(root.get(AUTHOR_FIELD), searchAuthorsDto.getName()) :
+                criteriaBuilder.like(root.get(AUTHOR_FIELD), "%" + searchAuthorsDto.getName() + "%") :
                 criteriaBuilder.conjunction();
     }
 

@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `catalog`.`author` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 10
+AUTO_INCREMENT = 11
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `catalog`.`book` (
   `price` DECIMAL(10,2) NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 20
+AUTO_INCREMENT = 21
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS `catalog`.`book_author` (
     FOREIGN KEY (`book_id`)
     REFERENCES `catalog`.`book` (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 11
+AUTO_INCREMENT = 12
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `catalog`.`tag` (
   `description` TEXT NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 2
+AUTO_INCREMENT = 3
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -92,17 +92,20 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- Table `catalog`.`book_tag`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `catalog`.`book_tag` (
-  `id_tag` INT NOT NULL,
-  `id_book` INT NOT NULL,
-  PRIMARY KEY (`id_tag`, `id_book`),
-  INDEX `id_book_fk_idx` (`id_book` ASC) VISIBLE,
+  `tag_id` INT NOT NULL,
+  `book_id` INT NOT NULL,
+  `book_tag_id` INT NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`book_tag_id`),
+  INDEX `id_book_fk_idx` (`book_id` ASC) VISIBLE,
+  INDEX `id_tag_fk` (`tag_id` ASC) VISIBLE,
   CONSTRAINT `id_book_tag_fk`
-    FOREIGN KEY (`id_book`)
+    FOREIGN KEY (`book_id`)
     REFERENCES `catalog`.`book` (`id`),
   CONSTRAINT `id_tag_fk`
-    FOREIGN KEY (`id_tag`)
+    FOREIGN KEY (`tag_id`)
     REFERENCES `catalog`.`tag` (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 2
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 

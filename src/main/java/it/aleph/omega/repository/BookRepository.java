@@ -17,9 +17,9 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
             "LEFT JOIN book_author " +
             "ON book.id = book_author.book_id " +
             "LEFT JOIN book_tag " +
-            "ON book.id = book_tag.id_book " +
+            "ON book.id = book_tag.book_id " +
             "WHERE (book_author.book_id IS NULL) OR " +
-            "(book_tag.id_book IS NULL)"
+            "(book_tag.book_id IS NULL)"
     )
     Page<Book> findOrphanedBooks(Pageable pageable);
 
@@ -28,10 +28,10 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
             "LEFT JOIN book_author " +
             "ON book.id = book_author.book_id " +
             "LEFT JOIN book_tag " +
-            "ON book.id = book_tag.id_book " +
+            "ON book.id = book_tag.book_id " +
             "WHERE book.id IN ? " +
             "AND (book_author.book_id IS NOT NULL OR " +
-            "book_tag.id_book IS NOT NULL)")
+            "book_tag.book_id IS NOT NULL)")
     List<Book> findByIdIn(List<Long> ids);
 
 }
