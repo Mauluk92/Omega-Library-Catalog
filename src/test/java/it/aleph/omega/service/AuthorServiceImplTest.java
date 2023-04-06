@@ -93,7 +93,7 @@ public class AuthorServiceImplTest {
 
         authorService.removeAuthorById(1L);
 
-        Assertions.assertDoesNotThrow(ResourceNotFoundException::new);
+        Assertions.assertDoesNotThrow(() -> new ResourceNotFoundException());
     }
 
     @DisplayName("Update Author info by id")

@@ -214,7 +214,7 @@ public class BookServiceImplTest {
 
         bookService.removeBookById(1L);
 
-        Assertions.assertDoesNotThrow(ResourceNotFoundException::new);
+        Assertions.assertDoesNotThrow(() -> new ResourceNotFoundException());
 
     }
 
