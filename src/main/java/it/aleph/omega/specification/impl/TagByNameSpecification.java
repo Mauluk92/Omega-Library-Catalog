@@ -28,7 +28,7 @@ public class TagByNameSpecification implements Specification<Tag>, Specification
     @Override
     public Predicate toPredicate(Root<Tag> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         return Objects.nonNull(searchTagsDto.getTag()) ?
-                criteriaBuilder.equal(root.get(TAG_FIELD), searchTagsDto.getTag()) :
+                criteriaBuilder.like(root.get(TAG_FIELD), "%" + searchTagsDto.getTag() + "%") :
                 criteriaBuilder.conjunction();
     }
 
