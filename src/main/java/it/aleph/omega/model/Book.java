@@ -33,9 +33,9 @@ public class Book {
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "book_tag",
-            joinColumns =@JoinColumn(name="id_book",
+            joinColumns =@JoinColumn(name="book_id",
                     referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name="id_tag",
+            inverseJoinColumns = @JoinColumn(name="tag_id",
                     referencedColumnName = "id") )
     private List<Tag> tagList;
 
