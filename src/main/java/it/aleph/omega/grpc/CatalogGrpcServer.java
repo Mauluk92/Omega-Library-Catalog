@@ -6,6 +6,7 @@ import com.google.protobuf.Empty;
 import io.grpc.Metadata;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
+import it.aleph.omega.exception.ResourceNotFoundException;
 import it.aleph.omega.exception.grpc.GrpcExceptionMapper;
 import it.aleph.omega.mapper.BookGrpcMapper;
 import it.aleph.omega.service.BookService;
@@ -21,14 +22,13 @@ import org.springframework.web.server.ResponseStatusException;
 public class CatalogGrpcServer extends BookProtoServiceGrpc.BookProtoServiceImplBase {
     private final BookService bookService;
     private final BookGrpcMapper bookGrpcMapper;
-    @Qualifier(value = "responseStatusMapper")
     private final GrpcExceptionMapper grpcExceptionMapper;
 
     @Override
     public void setAvailableBookStream(Book.BookPatchRequest request, StreamObserver<Empty> responseObserver) {
         try{
             bookService.patchBooks(bookGrpcMapper.toDto(request));
-        }catch(ResponseStatusException ex){
+        }catch(ResourceNotFoundException ex){
             grpcExceptionMapper.mapException(ex, responseObserver);
         }
         responseObserver.onNext(Empty.newBuilder().build());

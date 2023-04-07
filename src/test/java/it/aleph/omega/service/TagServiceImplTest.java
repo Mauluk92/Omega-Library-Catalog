@@ -95,7 +95,7 @@ public class TagServiceImplTest {
 
         tagService.removeTagById(1L);
 
-        Assertions.assertDoesNotThrow(ResourceNotFoundException::new);
+        Assertions.assertDoesNotThrow(() -> new ResourceNotFoundException());
 
     }
 

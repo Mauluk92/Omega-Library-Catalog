@@ -8,3 +8,6 @@ server:
   error:
     include-message: always
     include-binding-errors: always
+grpc:
+  server:
+    port: 9090

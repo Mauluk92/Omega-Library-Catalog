@@ -120,8 +120,7 @@ public class BookServiceImpl implements BookService {
         List<Long> foundBookIdList = foundBookList.stream().map(Book::getId).collect(Collectors.toList());
         patchBooksDto.getBookIdList().removeAll(foundBookIdList);
         if(!patchBooksDto.getBookIdList().isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "The following ids were not found: " +
+            throw new ResourceNotFoundException("The following ids were not found: " +
                             patchBooksDto.getBookIdList());
         }
         return bookDtoMapper.toBookDtoList(bookRepository.saveAll(foundBookList));
