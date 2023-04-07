@@ -2,7 +2,8 @@
     "pubDate": -5357740773,
     "pubHouse": "Ippocampo",
     "title": "Alice in Wonderland",
-    "quantity": 2,
+    "isbn": "1234567890",
+    "deweyDecimalCode": "100.00",
     "contentDescription": "This is one of the most famous work of the logician-writer Lewis Carroll",
     "available": true
 }
