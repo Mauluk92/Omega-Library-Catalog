@@ -22,7 +22,6 @@ import org.springframework.web.server.ResponseStatusException;
 public class CatalogGrpcServer extends BookProtoServiceGrpc.BookProtoServiceImplBase {
     private final BookService bookService;
     private final BookGrpcMapper bookGrpcMapper;
-    @Qualifier(value = "responseStatusMapper")
     private final GrpcExceptionMapper grpcExceptionMapper;
 
     @Override

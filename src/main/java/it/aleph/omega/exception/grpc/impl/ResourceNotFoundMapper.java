@@ -4,19 +4,11 @@ import io.grpc.Metadata;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import it.aleph.omega.exception.ResourceNotFoundException;
-import it.aleph.omega.exception.grpc.GrpcExceptionMapper;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
+import it.aleph.omega.exception.grpc.AbstractGrpcExceptionMapper;
+import lombok.Builder;
 
-import java.util.Optional;
-
-@Component
-@Qualifier(value = "responseStatusMapper")
-@RequiredArgsConstructor
-public class ResourceNotFoundMapper implements GrpcExceptionMapper {
-
-    private GrpcExceptionMapper grpcExceptionMapper;
+@Builder
+public class ResourceNotFoundMapper extends AbstractGrpcExceptionMapper {
 
 
     @Override
@@ -29,11 +21,7 @@ public class ResourceNotFoundMapper implements GrpcExceptionMapper {
                     .withDescription(throwable.getMessage())
                     .asRuntimeException(metadata));
         }else{
-            Optional
-                    .ofNullable(grpcExceptionMapper)
-                    .ifPresentOrElse(
-                            mapper -> mapper.mapException(throwable, observer),
-                            () -> onDefault(observer));
+            super.mapException(throwable, observer);
         }
     }
 }
