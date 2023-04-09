@@ -1,5 +1,6 @@
 package it.aleph.omega.exception.grpc.builder;
 
+import it.aleph.omega.exception.grpc.AbstractGrpcExceptionMapper;
 import it.aleph.omega.exception.grpc.GrpcExceptionMapper;
 import org.springframework.lang.NonNull;
 
@@ -11,7 +12,5 @@ import org.springframework.lang.NonNull;
  */
 public interface GrpcExceptionMapperBuilder {
 
-    GrpcExceptionMapperBuilder addLink(@NonNull GrpcExceptionMapper grpcExceptionMapper);
-
-    GrpcExceptionMapper build();
+    AbstractGrpcExceptionMapper addLink(@NonNull AbstractGrpcExceptionMapper builder);
 }

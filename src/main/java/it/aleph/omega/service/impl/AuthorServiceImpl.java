@@ -4,7 +4,7 @@ import it.aleph.omega.dto.author.AuthorDto;
 import it.aleph.omega.dto.author.CreateAuthorDto;
 import it.aleph.omega.dto.author.SearchAuthorsDto;
 import it.aleph.omega.dto.author.UpdateAuthorDto;
-import it.aleph.omega.exception.ResourceNotFoundException;
+import it.aleph.omega.exception.NotFoundException;
 import it.aleph.omega.mapper.AuthorDtoMapper;
 import it.aleph.omega.model.Author;
 import it.aleph.omega.repository.AuthorRepository;
@@ -19,7 +19,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +30,7 @@ public class AuthorServiceImpl implements AuthorService {
     private final List<SpecificationBuilder<SearchAuthorsDto, Author>> specificationBuilderList;
 
 
+
     @Override
     public AuthorDto addAuthor(CreateAuthorDto createAuthorDto) {
         Author entity = authorDtoMapper.toEntity(createAuthorDto);
@@ -39,19 +39,19 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public AuthorDto getAuthorById(Long id) {
-        Author authorObtained = authorRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        Author authorObtained = authorRepository.findById(id).orElseThrow(() -> buildNotFoundException(List.of(id)));
         return authorDtoMapper.toDto(authorObtained);
     }
 
     @Override
     public void removeAuthorById(Long id) {
-        Author authorObtained = authorRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        Author authorObtained = authorRepository.findById(id).orElseThrow(() -> buildNotFoundException(List.of(id)));
         authorRepository.delete(authorObtained);
     }
 
     @Override
     public AuthorDto updateAuthorById(Long id, UpdateAuthorDto updated) {
-        Author authorObtained = authorRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        Author authorObtained = authorRepository.findById(id).orElseThrow(() -> buildNotFoundException(List.of(id)));
         authorDtoMapper.update(authorObtained, updated);
         authorRepository.save(authorObtained);
         return authorDtoMapper.toDto(authorObtained);
@@ -71,5 +71,9 @@ public class AuthorServiceImpl implements AuthorService {
                 specificationBuilder.setFilter(searchAuthorsDto).build())
                 .reduce(Specification::and)
                 .orElse(null);
+    }
+
+    private RuntimeException buildNotFoundException(List<Long> idList){
+        return NotFoundException.builder().idListNotFound(idList).message("The following ids were not found").build();
     }
 }

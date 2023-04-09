@@ -2,7 +2,7 @@ package it.aleph.omega.service.impl;
 
 import com.google.zxing.WriterException;
 import it.aleph.omega.dto.book.*;
-import it.aleph.omega.exception.ResourceNotFoundException;
+import it.aleph.omega.exception.NotFoundException;
 import it.aleph.omega.mapper.BookDtoMapper;
 import it.aleph.omega.model.Author;
 import it.aleph.omega.model.Book;
@@ -49,7 +49,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto updateBook(Long id, UpdateBookDto updateBookDto) {
-        Book obtainedBook = bookRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        Book obtainedBook = bookRepository.findById(id).orElseThrow(() -> buildNotFoundException(List.of(id)));
         bookDtoMapper.updateBook(obtainedBook, updateBookDto);
         bookRepository.save(obtainedBook);
         return bookDtoMapper.toDto(obtainedBook);
@@ -57,12 +57,12 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public byte[] getQRCodeBook(Long id) throws IOException, WriterException {
-        return qrCodeBuilder.produceQRCode(bookRepository.findById(id).orElseThrow(ResourceNotFoundException::new));
+        return qrCodeBuilder.produceQRCode(bookRepository.findById(id).orElseThrow(() -> buildNotFoundException(List.of(id))));
     }
 
     @Override
     public BookDto updateBookStatus(Long id, Boolean status) {
-        Book obtainedBook = bookRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        Book obtainedBook = bookRepository.findById(id).orElseThrow(() -> buildNotFoundException(List.of(id)));
         obtainedBook.setAvailable(status);
         bookRepository.save(obtainedBook);
         return bookDtoMapper.toDto(obtainedBook);
@@ -70,7 +70,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto associateBook(Long id, AssociateBookDto associateBookDto) {
-        Book obtainedBook = bookRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        Book obtainedBook = bookRepository.findById(id).orElseThrow(() -> buildNotFoundException(List.of(id)));
         List<Author> authors = authorRepository.findAllById(associateBookDto.getAuthorIdList());
         List<Tag> tags = tagRepository.findAllById(associateBookDto.getTagIdList());
         obtainedBook.setAuthorList(authors);
@@ -81,13 +81,13 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto getBookById(Long id) {
-        Book obtainedBook = bookRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        Book obtainedBook = bookRepository.findById(id).orElseThrow(() -> buildNotFoundException(List.of(id)));
         return bookDtoMapper.toDto(obtainedBook);
     }
 
     @Override
     public void removeBookById(Long id) {
-        Book obtainedBook = bookRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        Book obtainedBook = bookRepository.findById(id).orElseThrow(() -> buildNotFoundException(List.of(id)));
         bookRepository.delete(obtainedBook);
     }
 
@@ -120,8 +120,7 @@ public class BookServiceImpl implements BookService {
         List<Long> foundBookIdList = foundBookList.stream().map(Book::getId).collect(Collectors.toList());
         patchBooksDto.getBookIdList().removeAll(foundBookIdList);
         if(!patchBooksDto.getBookIdList().isEmpty()){
-            throw new ResourceNotFoundException("The following ids were not found: " +
-                            patchBooksDto.getBookIdList());
+            throw buildNotFoundException(patchBooksDto.getBookIdList());
         }
         return bookDtoMapper.toBookDtoList(bookRepository.saveAll(foundBookList));
 
@@ -132,5 +131,9 @@ public class BookServiceImpl implements BookService {
                 .map(specificationBuilder -> specificationBuilder
                         .setFilter(searchBooksDto)
                         .build()).reduce(Specification::and).orElse(null);
+    }
+
+    private RuntimeException buildNotFoundException(List<Long> idList){
+        return NotFoundException.builder().idListNotFound(idList).message("The following ids were not found").build();
     }
 }
