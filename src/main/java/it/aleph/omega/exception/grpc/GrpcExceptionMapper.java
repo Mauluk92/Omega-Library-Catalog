@@ -1,5 +1,6 @@
 package it.aleph.omega.exception.grpc;
 
+import io.grpc.Metadata;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import it.aleph.omega.exception.grpc.builder.GrpcExceptionMapperBuilder;
@@ -12,6 +13,8 @@ import it.aleph.omega.exception.grpc.builder.GrpcExceptionMapperBuilder;
 public interface GrpcExceptionMapper extends GrpcExceptionMapperBuilder {
 
     void mapException(Throwable throwable, StreamObserver<?> observer);
+
+    Metadata buildMetadata(Metadata metadata, Throwable throwable);
 
     default void onDefault(StreamObserver<?> observer){
         observer.onError(Status.INTERNAL.asRuntimeException());

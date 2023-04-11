@@ -4,7 +4,7 @@ import it.aleph.omega.dto.tag.CreateTagDto;
 import it.aleph.omega.dto.tag.SearchTagsDto;
 import it.aleph.omega.dto.tag.TagDto;
 import it.aleph.omega.dto.tag.UpdateTagDto;
-import it.aleph.omega.exception.ResourceNotFoundException;
+import it.aleph.omega.exception.NotFoundException;
 import it.aleph.omega.mapper.TagDtoMapper;
 import it.aleph.omega.model.Tag;
 import it.aleph.omega.repository.TagRepository;
@@ -38,19 +38,19 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public TagDto getTagById(Long id) {
-        Tag tagObtained = tagRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        Tag tagObtained = tagRepository.findById(id).orElseThrow(() -> buildNotFoundException(List.of(id)));
         return tagDtoMapper.toDto(tagObtained);
     }
 
     @Override
     public void removeTagById(Long id) {
-        Tag tagObtained = tagRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        Tag tagObtained = tagRepository.findById(id).orElseThrow(() -> buildNotFoundException(List.of(id)));
         tagRepository.delete(tagObtained);
     }
 
     @Override
     public TagDto updateTagById(Long id, UpdateTagDto updateTagDto) {
-        Tag tagObtained = tagRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        Tag tagObtained = tagRepository.findById(id).orElseThrow(() -> buildNotFoundException(List.of(id)));
         tagDtoMapper.update(tagObtained, updateTagDto);
         tagRepository.save(tagObtained);
         return tagDtoMapper.toDto(tagObtained);
@@ -60,15 +60,19 @@ public class TagServiceImpl implements TagService {
     public List<TagDto> getAllTags(Integer pageNum, Integer pageSize, String tag) {
         Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by("tag"));
         SearchTagsDto searchTagsDto = SearchTagsDto.builder().tag(tag).build();
-        Page<Tag> pageOfTags = tagRepository.findAll(buildSpecification(searchTagsDto),pageable);
+        Page<Tag> pageOfTags = tagRepository.findAll(buildSpecification(searchTagsDto), pageable);
         return tagDtoMapper.toDtoList(pageOfTags.toList());
     }
 
-    private Specification<Tag> buildSpecification(SearchTagsDto searchTagsDto){
+    private Specification<Tag> buildSpecification(SearchTagsDto searchTagsDto) {
         return specificationBuilderList.stream()
                 .map(specificationBuilder ->
                         specificationBuilder.setFilter(searchTagsDto).build())
                 .reduce(Specification::and)
                 .orElse(null);
+    }
+
+    private RuntimeException buildNotFoundException(List<Long> idList) {
+        return NotFoundException.builder().idListNotFound(idList).message("The following ids were not found").build();
     }
 }

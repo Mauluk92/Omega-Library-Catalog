@@ -1,17 +1,20 @@
 package it.aleph.omega.dto.book;
 
+
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 
 @Data
 public class CreateBookDto {
-
     @NotNull
     private String title;
+
     @NotNull
     @Pattern(regexp = "^\\d{10}$", message = "ISBN should have exactly 10 numbers")
     private String isbn;
@@ -26,6 +29,6 @@ public class CreateBookDto {
     private String pubHouse;
     @NotNull
     private Boolean available;
-
+    @Nullable
     private BigDecimal price;
 }
