@@ -2,13 +2,8 @@ package it.aleph.omega.exception.grpc;
 
 import io.grpc.Metadata;
 import io.grpc.stub.StreamObserver;
-import it.aleph.omega.exception.grpc.builder.GrpcExceptionMapperBuilder;
-import it.aleph.omega.exception.grpc.impl.ResourceNotFoundMapper;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -58,12 +53,12 @@ public abstract class AbstractGrpcExceptionMapper implements GrpcExceptionMapper
     /**
      * Metadata builder for further information processing. This is the standard method,
      * but each subclass can implement its own metadata configurations
-     * @param metadata Metadata to be put in the error response
      * @param throwable The throwable to be caught
      * @return fully configured Metadata for the grpc error response
      */
     @Override
-    public Metadata buildMetadata(Metadata metadata, Throwable throwable){
+    public Metadata buildMetadata(Throwable throwable){
+        Metadata metadata = new Metadata();
         metadata.put(Metadata.Key.of(KEY_ERRORS, Metadata.ASCII_STRING_MARSHALLER),
                 throwable.getMessage());
         return metadata;
