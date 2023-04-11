@@ -3,6 +3,7 @@ package it.aleph.omega.grpc;
 import book.Book;
 import book.BookProtoServiceGrpc;
 import com.google.protobuf.Empty;
+import io.grpc.stub.MetadataUtils;
 import io.grpc.stub.StreamObserver;
 import it.aleph.omega.exception.NotFoundException;
 import it.aleph.omega.exception.grpc.GrpcExceptionMapper;

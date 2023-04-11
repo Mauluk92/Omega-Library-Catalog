@@ -38,19 +38,19 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public TagDto getTagById(Long id) {
-        Tag tagObtained = tagRepository.findById(id).orElseThrow(() -> buildNotFoundException(List.of(id)));
+        Tag tagObtained = accessResource(id);
         return tagDtoMapper.toDto(tagObtained);
     }
 
     @Override
     public void removeTagById(Long id) {
-        Tag tagObtained = tagRepository.findById(id).orElseThrow(() -> buildNotFoundException(List.of(id)));
+        Tag tagObtained = accessResource(id);
         tagRepository.delete(tagObtained);
     }
 
     @Override
     public TagDto updateTagById(Long id, UpdateTagDto updateTagDto) {
-        Tag tagObtained = tagRepository.findById(id).orElseThrow(() -> buildNotFoundException(List.of(id)));
+        Tag tagObtained = accessResource(id);
         tagDtoMapper.update(tagObtained, updateTagDto);
         tagRepository.save(tagObtained);
         return tagDtoMapper.toDto(tagObtained);
@@ -72,7 +72,11 @@ public class TagServiceImpl implements TagService {
                 .orElse(null);
     }
 
+    private Tag accessResource(Long id){
+        return tagRepository.findById(id).orElseThrow(() -> buildNotFoundException(List.of(id)));
+    }
+
     private RuntimeException buildNotFoundException(List<Long> idList) {
-        return NotFoundException.builder().idListNotFound(idList).message("The following ids were not found").build();
+        return NotFoundException.builder().idListNotFound(idList).message("The following id was not found: ").build();
     }
 }

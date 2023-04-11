@@ -39,19 +39,19 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public AuthorDto getAuthorById(Long id) {
-        Author authorObtained = authorRepository.findById(id).orElseThrow(() -> buildNotFoundException(List.of(id)));
+        Author authorObtained = accessResource(id);
         return authorDtoMapper.toDto(authorObtained);
     }
 
     @Override
     public void removeAuthorById(Long id) {
-        Author authorObtained = authorRepository.findById(id).orElseThrow(() -> buildNotFoundException(List.of(id)));
+        Author authorObtained = accessResource(id);
         authorRepository.delete(authorObtained);
     }
 
     @Override
     public AuthorDto updateAuthorById(Long id, UpdateAuthorDto updated) {
-        Author authorObtained = authorRepository.findById(id).orElseThrow(() -> buildNotFoundException(List.of(id)));
+        Author authorObtained = accessResource(id);
         authorDtoMapper.update(authorObtained, updated);
         authorRepository.save(authorObtained);
         return authorDtoMapper.toDto(authorObtained);
@@ -73,7 +73,11 @@ public class AuthorServiceImpl implements AuthorService {
                 .orElse(null);
     }
 
+    private Author accessResource(Long id){
+        return authorRepository.findById(id).orElseThrow(() -> buildNotFoundException(List.of(id)));
+    }
+
     private RuntimeException buildNotFoundException(List<Long> idList){
-        return NotFoundException.builder().idListNotFound(idList).message("The following ids were not found").build();
+        return NotFoundException.builder().idListNotFound(idList).message("The following id was not found: ").build();
     }
 }
