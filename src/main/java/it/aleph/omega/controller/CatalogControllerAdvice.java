@@ -8,6 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.time.Instant;
 import java.util.List;
@@ -24,6 +25,7 @@ public class CatalogControllerAdvice {
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiError handleConstraintViolations(MethodArgumentNotValidException ex, HttpServletRequest request) {
         return ApiError.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
@@ -41,13 +43,18 @@ public class CatalogControllerAdvice {
     }
 
     @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ApiError handleResourceNotFound(NotFoundException ex, HttpServletRequest request){
         return ApiError.builder()
                 .status(HttpStatus.NOT_FOUND.value())
                 .timestamp(Instant.now())
                 .path(request.getRequestURL().toString())
                 .message(MESSAGE_RESOURCE_NOT_FOUND)
-                .errors(List.of(ErrorMessage.builder().message(ex.getMessage()).build()))
+                .errors(ex.getIdListNotFound().stream().map(id -> ErrorMessage
+                        .builder()
+                        .message(ex.getMessage().concat(id.toString()))
+                        .build())
+                        .collect(Collectors.toList()))
                 .build();
     }
 }

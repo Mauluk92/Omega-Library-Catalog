@@ -49,7 +49,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto updateBook(Long id, UpdateBookDto updateBookDto) {
-        Book obtainedBook = bookRepository.findById(id).orElseThrow(() -> buildNotFoundException(List.of(id)));
+        Book obtainedBook = accessResource(id);
         bookDtoMapper.updateBook(obtainedBook, updateBookDto);
         bookRepository.save(obtainedBook);
         return bookDtoMapper.toDto(obtainedBook);
@@ -57,12 +57,12 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public byte[] getQRCodeBook(Long id) throws IOException, WriterException {
-        return qrCodeBuilder.produceQRCode(bookRepository.findById(id).orElseThrow(() -> buildNotFoundException(List.of(id))));
+        return qrCodeBuilder.produceQRCode(accessResource(id));
     }
 
     @Override
     public BookDto updateBookStatus(Long id, Boolean status) {
-        Book obtainedBook = bookRepository.findById(id).orElseThrow(() -> buildNotFoundException(List.of(id)));
+        Book obtainedBook = accessResource(id);
         obtainedBook.setAvailable(status);
         bookRepository.save(obtainedBook);
         return bookDtoMapper.toDto(obtainedBook);
@@ -70,7 +70,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto associateBook(Long id, AssociateBookDto associateBookDto) {
-        Book obtainedBook = bookRepository.findById(id).orElseThrow(() -> buildNotFoundException(List.of(id)));
+        Book obtainedBook = accessResource(id);
         List<Author> authors = authorRepository.findAllById(associateBookDto.getAuthorIdList());
         List<Tag> tags = tagRepository.findAllById(associateBookDto.getTagIdList());
         obtainedBook.setAuthorList(authors);
@@ -81,13 +81,13 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto getBookById(Long id) {
-        Book obtainedBook = bookRepository.findById(id).orElseThrow(() -> buildNotFoundException(List.of(id)));
+        Book obtainedBook = accessResource(id);
         return bookDtoMapper.toDto(obtainedBook);
     }
 
     @Override
     public void removeBookById(Long id) {
-        Book obtainedBook = bookRepository.findById(id).orElseThrow(() -> buildNotFoundException(List.of(id)));
+        Book obtainedBook = accessResource(id);
         bookRepository.delete(obtainedBook);
     }
 
@@ -133,7 +133,11 @@ public class BookServiceImpl implements BookService {
                         .build()).reduce(Specification::and).orElse(null);
     }
 
+    private Book accessResource(Long id){
+        return bookRepository.findById(id).orElseThrow(() ->buildNotFoundException(List.of(id)));
+    }
+
     private RuntimeException buildNotFoundException(List<Long> idList){
-        return NotFoundException.builder().idListNotFound(idList).message("The following ids were not found").build();
+        return NotFoundException.builder().idListNotFound(idList).message("The following id was not found: ").build();
     }
 }
