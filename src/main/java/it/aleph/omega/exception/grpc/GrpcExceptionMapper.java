@@ -14,7 +14,7 @@ public interface GrpcExceptionMapper extends GrpcExceptionMapperBuilder {
 
     void mapException(Throwable throwable, StreamObserver<?> observer);
 
-    Metadata buildMetadata(Metadata metadata, Throwable throwable);
+    Metadata buildMetadata(Throwable throwable);
 
     default void onDefault(StreamObserver<?> observer){
         observer.onError(Status.INTERNAL.asRuntimeException());
